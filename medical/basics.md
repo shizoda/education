@@ -11,7 +11,7 @@
 ### CT 画像
 
 Computed Tomography (CT, コンピュータ断層撮影) は、X線を用いて身体の内部を描出するための撮像技術です。患者を囲むように回転するX線管と検出器によって、体内の異なる角度から多数の画像を撮影し、これらを組み合わせて再構成することで、断面画像（スライス）を生成します。スライスを重ね合わせて、3次元画像として体内を立体的に画像化できます。
-<figure>
+<figure style="text-align: center; width: 50%; margin: auto;">
   <img src="https://github.com/shizoda/education/assets/34496702/4646e199-4d14-41e0-a601-f5f47e6d4005">
   <figcaption>"3方向(Axial, Coronal, Sagittal)からスライスした肺の断面画像"</figcaption>
 </figure>
@@ -23,8 +23,8 @@ CT画像では、各画素の濃度値を Hounsfield Unit（H.U. ハンスフィ
 H.U.の値は、CT画像上で異なる組織を特定するのに役立ちます。肺がんのような病変は、周囲の正常な組織とは異なるH.U.値を持つことが多く、これによりCT画像上で識別することが可能になります。
 
 <figure>
-  <img src="https://github.com/shizoda/education/assets/34496702/309a03c2-631b-4550-a5cb-738a3f905084", width=400px><br>
-  <figcaption>Hounsfield Unit と、注目すべき範囲を閲覧するときの設定。幅を Window Width (WW)、中央を Window Center (WC) で指定すると、その範囲が黒から白までのグラデーションで表現される。</figcaption>
+  <img src="https://github.com/shizoda/education/assets/34496702/309a03c2-631b-4550-a5cb-738a3f905084", style="width: 50%; height: auto;"><br>
+  <figcaption>Hounsfield Unit と、注目したい範囲を閲覧するときの設定。幅を Window Width (WW)、中央を Window Center (WC) で指定すると、その範囲が黒から白までのグラデーションで表現される。</figcaption>
 </figure>
 
 ## 医用画像処理
