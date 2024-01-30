@@ -11,7 +11,13 @@
 ### CT 画像
 
 Computed Tomography (CT, コンピュータ断層撮影) は、X線を用いて身体の内部を描出するための撮像技術です。患者を囲むように回転するX線管と検出器によって、体内の異なる角度から多数の画像を撮影し、これらを組み合わせて再構成することで、断面画像（スライス）を生成します。スライスを重ね合わせて、3次元画像として体内を立体的に画像化できます。
-![CT画像](https://github.com/shizoda/education/assets/34496702/4646e199-4d14-41e0-a601-f5f47e6d4005 "3方向からスライスした肺の断面画像")
+<figure>
+  <img src="https://github.com/shizoda/education/assets/34496702/4646e199-4d14-41e0-a601-f5f47e6d4005">
+  <figcaption>"3方向からスライスした肺の断面画像"</figcaption>
+</figure>
+  
+
+上記の図では，3方向(Axital)
 
 
 #### Hounsfield Unit (H.U.)
