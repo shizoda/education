@@ -72,6 +72,5 @@ H.U.の値は、CT画像上で異なる組織を特定するのに役立ちま�
 
 ### NIfTI形式データの可視化
 
-NIfTI形式のデータを効果的に可視化・分析するためには、専門的なソフトウェアが必要です。[3D Slicer](https://www.slicer.org/) や [MITK Workbench](https://sourceforge.net/projects/mitk/)、[ITK-SNAP](http://www.itksnap.org/pmwiki/pmwiki.php) などは、これらの医用画像データを扱うためのオープンソースのソフトウェアです。単なる可視化のみならず、フィルタリング、手動・半自動でのセグメンテーション、画像の位置合わせなど、さまざまな高度な画像処理機能を提供します。
-
+NIfTI形式のデータを効果的に可視化・分析するためには、専門的なソフトウェアが必要です。[3D Slicer](https://www.slicer.org/) や [MITK Workbench](https://www.mitk.org/wiki/The_Medical_Imaging_Interaction_Toolkit_(MITK))、[ITK-SNAP](http://www.itksnap.org/pmwiki/pmwiki.php) などは、これらの医用画像データを扱うためのオープンソースのソフトウェアです。単なる可視化のみならず、フィルタリング、手動・半自動でのセグメンテーション、画像の位置合わせなど、さまざまな高度な画像処理機能を提供します。
 
