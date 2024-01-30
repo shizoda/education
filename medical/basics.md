@@ -23,7 +23,7 @@ CT画像では、各画素の濃度値を Hounsfield Unit（H.U. ハンスフィ
 H.U.の値は、CT画像上で異なる組織を特定するのに役立ちます。肺がんのような病変は、周囲の正常な組織とは異なるH.U.値を持つことが多く、これによりCT画像上で識別することが可能になります。
 
 <figure>
-  <img src="https://github.com/shizoda/education/assets/34496702/309a03c2-631b-4550-a5cb-738a3f905084">
+  <img src="https://github.com/shizoda/education/assets/34496702/309a03c2-631b-4550-a5cb-738a3f905084", width=400px><br>
   <figcaption>Hounsfield Unit と、注目すべき範囲を閲覧するときの設定。幅を Window Width (WW)、中央を Window Center (WC) で指定すると、その範囲が黒から白までのグラデーションで表現される。</figcaption>
 </figure>
 
