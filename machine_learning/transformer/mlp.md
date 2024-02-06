@@ -113,4 +113,4 @@ Self-Attention や Transformer を理解するうえで、Query クエリ / Key 
 
 #### 備考
 
-Attentionメカニズムには、Self-Attention以外にも様々な形式が存在しますが、Query, Key, Valueという概念は、特にSelf-Attentionとその応用であるTransformerモデルにおいて中心的な役割を果たします。他のAttention形式では、同じ概念が異なる形で使用される場合がありますが、TransformerモデルにおけるSelf-Attentionの説明においては、これらの概念が非常に重要です。
+Attentionメカニズムには、Self-Attention以外にも様々な形式が存在しますが、Query, Key, Valueという概念は、特にSelf-Attentionとその応用であるTransformerモデルにおいて中心的な役割を果たします。他のAttention形式では、同じ概念が異なる形で使用される場合もあります。
