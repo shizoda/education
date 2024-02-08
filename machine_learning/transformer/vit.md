@@ -3,9 +3,26 @@
 ## 概要
 Vision Transformer (ViT) は、画像処理タスクにTransformerアーキテクチャを応用した革新的なモデルです。従来の畳み込みニューラルネットワーク（CNN）が画像の局所的な特徴を段階的に抽出するのに対し、ViTは画像を複数のパッチに分割し、これら全てのパッチを一度に考慮することで、画像全体のコンテキストを把握します。このアプローチにより、ViTは画像内の広範囲にわたる関係性を捉え、特に大規模なデータセットにおいて、従来のCNNモデルを上回る性能を発揮することが示されています。
 
-自然言語処理 (NLP) 分野で成功を収めたTransformerモデルを画像に適用することで、ViTは、単語の並びや文脈を理解するのに類似した方法で、画像の「部分」とそれらがどのように全体の意味を形成するかを理解します。このように、ViTはNLPの技術を画像分析に応用し、画像の全体的な理解という新たな次元を開拓しました。
+[自然言語処理の分野で成功を収めたTransformerモデル](./mlp.md)を画像に適用することで、ViTは、単語の並びや文脈を理解するのに類似した方法で、画像の「部分」とそれらがどのように全体の意味を形成するかを理解します。このように、ViTは自然言語処理の技術を画像分析に応用し、画像の全体的な理解を可能としました。
 
-## 基本設定
+
+<img src="https://github.com/shizoda/education/assets/34496702/819c94b6-355e-43cc-a79c-a6b0a50f02dd" width=40%>
+
+*[原論文 [Dosovitskiy21]](https://openreview.net/forum?id=YicbFdNTTy) Fig. 6 の一部。注目される領域*
+
+
+*** 
+
+## 手法
+
+ここから具体的な処理について見ていきます。
+
+<img src="https://github.com/shizoda/education/assets/34496702/f4d8612f-66a6-4302-8163-dd5d8d63f27d" width=60%>
+
+*[原論文 [Dosovitskiy21]](https://openreview.net/forum?id=YicbFdNTTy) Fig. 1 の一部。全体構成を表す*
+
+#### 前提
+
 - **入力画像サイズ**: $X \times Y$ ピクセル、チャネル数 $C$ （例: 224x224ピクセル, RGB画像として $C=3$ ）
 - **パッチサイズ**: $P \times P$ ピクセル（例: 16x16ピクセル）
 - **パッチの数 $(N)$**: $\frac{X}{P} \times \frac{Y}{P}$ （例: $14 \times 14 = 196$）
@@ -24,6 +41,10 @@ Transformerは元来、テキストデータを扱うために設計されまし
 の2種類があります。いずれも、パッチが元の画像のどこにあったかを表す情報を提供します。
 
 ## Transformer エンコード
+
+<img src="https://github.com/shizoda/education/assets/34496702/f077090b-f69b-484a-b448-c2d9bd1a5891" width=20%>
+
+*[原論文 [Dosovitskiy21]](https://openreview.net/forum?id=YicbFdNTTy) Fig. 1 の一部。Transformer エンコーダの構成*
 
 ### 前提
 
