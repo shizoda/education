@@ -2,6 +2,7 @@
 
 ### 目次
 #### 機械学習
+- [入門](https://github.com/shizoda/education/blob/main/machine_learning/basics/neural.ipynb)
 - [CNN](https://github.com/shizoda/education/blob/main/machine_learning/cnn/cifar10_pytorch.ipynb)
 - [自然言語処理におけるTransformer](https://github.com/shizoda/education/blob/main/machine_learning/transformer/mlp.md)
 - [Vision Transformer (ViT)](https://github.com/shizoda/education/blob/main/machine_learning/transformer/vit.md)
