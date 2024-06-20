@@ -231,3 +231,13 @@ def receive_message(codebook_filename, padding_filename, data_filename, message_
         print(f"{message_from} さんから {message_to} さんへ既にメッセージが送信されたかどうか確認して下さい")
 
     return codebook, padding_length, received_data
+
+def send_message(saved_dir, message_from, message_to, error_rate=0.2):
+    # ファイル名設定
+    data_filename = f"{saved_dir}/{message_from}-{message_to}.txt"
+    codebook_filename = f"{saved_dir}/{message_from}-{message_to}-codebook.json"
+    padding_filename = f"{saved_dir}/{message_from}-{message_to}-padding.txt"
+
+    save_to_file(data_filename, transmitted_data)
+    save_codebook(codebook_filename, codebook)
+    save_padding_length(padding_filename, padding_length)
