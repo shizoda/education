@@ -212,3 +212,11 @@ def load_padding_length(filename):
     with open(filename, 'r') as file:
         padding_length = int(file.read())
     return padding_length
+
+def load_from_file(filename, orig, other):
+    if not os.path.exists(filename):
+        print(f"{other} さんから {orig} さんへのメッセージはありません。")
+        return None
+    with open(filename, 'r') as file:
+        data = file.read()
+    return data
