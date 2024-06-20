@@ -232,7 +232,7 @@ def receive_message(codebook_filename, padding_filename, data_filename, message_
 
     return codebook, padding_length, received_data
 
-def send_message(saved_dir, message_from, message_to, encoded_data, error_rate=0.2):
+def send_message(saved_dir, message_from, message_to, encoded_data, codebook, error_rate=0.2):
     transmitted_data = introduce_errors(encoded_data, error_rate)
     # ファイル名設定
     data_filename = f"{saved_dir}/{message_from}-{message_to}.txt"
