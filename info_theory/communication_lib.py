@@ -93,12 +93,20 @@ def huffman_decoding(encoded_text, codebook, padding_length):
     decoded_text = ''.join(decoded_text)
     return decoded_text
 
-import numpy as np
+color_dic = {"black":"\033[30m", "red":"\033[31m", "green":"\033[32m", "yellow":"\033[33m", "blue":"\033[34m", "end":"\033[0m"}
+
+def print_color(text, color="red"):
+    return color_dic[color] + text + color_dic["end"]
+
+def format_binary_string(binary_string, chunk_size=7, max_length=50):
+    if len(binary_string) > max_length:
+        binary_string = binary_string[:max_length] + "..."
+    formatted_string = ' '.join([binary_string[i:i+chunk_size] for i in range(0, len(binary_string), chunk_size)])
+    return formatted_string
 
 def hamming_encode(data):
-    
     print(f"Hamming Input  : {format_binary_string(data, 4)}")
-    
+
     def calculate_parity_bits(bits):
         p1 = bits[0] ^ bits[1] ^ bits[3]
         p2 = bits[0] ^ bits[2] ^ bits[3]
@@ -112,12 +120,13 @@ def hamming_encode(data):
             block.extend([0] * (4 - len(block)))  # Padding with zeros if less than 4 bits
         parity_bits = calculate_parity_bits(block)
         encoded_block = [parity_bits[0], parity_bits[1], block[0], parity_bits[2], block[1], block[2], block[3]]
-        # encoded_block = [ block[0], block[1], block[2], block[3], parity_bits[0], parity_bits[1], parity_bits[2]]
         encoded_data.extend(encoded_block)
-    
+
     encoded_str = ''.join(map(str, encoded_data))
-    # print(f"Hamming Encoded Data: {' '.join([encoded_str[i:i+7] for i in range(0, len(encoded_str), 7)])}")
-    print(f"Hamming Encoded: {format_binary_string(encoded_str)}")
+    formatted_encoded_str = format_binary_string(encoded_str, 7)
+    formatted_encoded_str = ''.join([print_color(bit, 'blue') if i % 8 in [0, 1, 3] else bit for i, bit in enumerate(formatted_encoded_str)])#.replace(" ", ""))])
+
+    print(f"Hamming Encoded: {formatted_encoded_str}")
     return encoded_str
 
 def hamming_decode(data):
@@ -143,9 +152,8 @@ def hamming_decode(data):
             if n_corrected < 10:
                 corrected_blocks.append((i, error_position, original_block, corrected))
             n_corrected += 1
-            
+
         decoded_block = [block[2], block[4], block[5], block[6]]
-        # decoded_block = [block[0], block[1], block[2], block[3]]
         decoded_data.extend(decoded_block)
         decoded_data_all.extend(block)
 
@@ -158,11 +166,18 @@ def hamming_decode(data):
         print(f"  (Block-{i//7}, Bit-{error_position-1}): {format_binary_string(original)} --> {format_binary_string(corrected)}")
     if n_corrected > 10:
         print("      etc.")
-    
-    print("Received       :", format_binary_string(data))
-    print("Hamming Decoded:", format_binary_string(decoded_str_all, 7))
-    print("Hamming Output :", format_binary_string(decoded_str, 4))
+
+    formatted_data = format_binary_string(data, 7)
+    formatted_data = ''.join([print_color(bit, 'blue') if i % 8 in [0, 1, 3] else bit for i, bit in enumerate(formatted_data)])
+    formatted_decoded_str_all = format_binary_string(decoded_str_all, 7)
+    formatted_decoded_str_all = ''.join([print_color(bit, 'blue') if i % 7 in [0, 1, 3] else bit for i, bit in enumerate(formatted_decoded_str_all.replace(" ", ""))])
+    formatted_decoded_str = format_binary_string(decoded_str, 4)
+
+    print("Received       :", formatted_data)
+    print("Hamming Decoded:", formatted_decoded_str_all)
+    print("Hamming Output :", formatted_decoded_str)
     return decoded_str
+
 
 import random
 
