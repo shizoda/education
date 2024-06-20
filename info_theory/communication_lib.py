@@ -220,3 +220,14 @@ def load_from_file(filename, orig, other):
     with open(filename, 'r') as file:
         data = file.read()
     return data
+
+def receive_message(codebook_filename, padding_filename, data_filename, message_from, message_to):
+    try:
+        codebook = load_codebook(codebook_filename)
+        padding_length = load_padding_length(padding_filename)
+        received_data = load_from_file(data_filename, message_from, message_to)
+    except Exception as exc:
+        print("エラー：", str(exc))
+        print(f"{message_from} さんから {message_to} さんへ既にメッセージが送信されたかどうか確認して下さい")
+
+    return codebook, padding_length, received_data
