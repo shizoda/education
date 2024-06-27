@@ -127,9 +127,11 @@ def huffman_decoding(encoded_text, codebook, padding_length):
 
 def display_huffman_tree(dot):
     dot.render('huffman_tree', format='png', cleanup=True)
-    display(Image(filename='huffman_tree.png'))
-
-
+    display(HTML(f"""
+    <div style="display:flex; justify-content:center;">
+        <img src="huffman_tree.png" style="height:400px;">
+    </div>
+    """))
 
 color_dic = {"black":"\033[30m", "red":"\033[31m", "green":"\033[32m", "yellow":"\033[33m", "blue":"\033[34m", "end":"\033[0m"}
 
