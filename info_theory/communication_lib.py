@@ -1,5 +1,8 @@
-import heapq, json, os
-from collections import defaultdict, Counter
+import heapq
+from collections import Counter
+import pandas as pd
+import graphviz
+from IPython.display import Image, display
 
 def format_binary_string(binary_string, chunk_size=7, max_length=50):
     if len(binary_string) > max_length:
@@ -65,28 +68,32 @@ def plot_huffman_tree(node):
     return dot
 
 def huffman_encoding(text):
-    root = build_huffman_tree(text)
+    root, freq_table = build_huffman_tree(text)
+
+    # Create and display frequency table
+    freq_df = pd.DataFrame(freq_table.items(), columns=['Character', 'Frequency'])
+    display(freq_df)
+
     codebook = build_codes(root)
+
+    # Create and display codebook table
+    codebook_df = pd.DataFrame(codebook.items(), columns=['Character', 'Code'])
+    display(codebook_df)
+
     encoded_text = ''.join(codebook[char] for char in text)
     encoded_text_breaks = ' '.join(codebook[char] for char in text)
-    print()
-    print("Character Codes: " + ' '.join(f"{c}:{ord(c)}" for c in text))
-    print()
-    print("Codebook: ",  ' '.join(f"{c}:{codebook[c]}" for c in sorted(codebook.keys(), key=lambda x: len(codebook[x]))) )
-    
+
     if len(encoded_text_breaks) >= 80:
-        encoded_text_breaks = encoded_text_breaks[:80]  + "..."
-    
-    print()
-    print(f"Huffman Encoded: {encoded_text_breaks}")
-    
-    # パディングを追加
+        encoded_text_breaks = encoded_text_breaks[:80] + "..."
+
+    print("\nHuffman Encoded: " + encoded_text_breaks)
+
     padding_length = (4 - len(encoded_text) % 4) % 4
     encoded_text += '0' * padding_length
 
     display_huffman_tree(plot_huffman_tree(root))
-    
-    return encoded_text, codebook, padding_length
+
+    return encoded_text, codebook, padding_length #, root
 
 def huffman_decoding(encoded_text, codebook, padding_length):
     reverse_codebook = {v: k for k, v in codebook.items()}
