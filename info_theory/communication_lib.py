@@ -72,14 +72,17 @@ def huffman_encoding(text):
     root, freq_table = build_huffman_tree(text)
 
     # Create and display frequency table
-    freq_df = pd.DataFrame(freq_table.items(), columns=['Character', 'Frequency']).T
-    display(freq_df)
+    freq_df = pd.DataFrame(freq_table.items(), columns=['文字', '頻度']).T
+    # display(freq_df)
 
     codebook = build_codes(root)
 
     # Create and display codebook table
-    codebook_df = pd.DataFrame(codebook.items(), columns=['Character', 'Code']).T
-    display(codebook_df)
+    codebook_df = pd.DataFrame(codebook.items(), columns=['文字', '符号']).T
+    # display(codebook_df)
+
+    merged_df = pd.merge(freq_df, codebook_df, on='文字', how='outer')
+    display(transposed_df.T)
 
     encoded_text = ''.join(codebook[char] for char in text)
     encoded_text_breaks = ' '.join(codebook[char] for char in text)
