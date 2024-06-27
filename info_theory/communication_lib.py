@@ -78,7 +78,7 @@ def huffman_encoding(text):
     codebook = build_codes(root)
 
     # Create and display codebook table
-    codebook_df = pd.DataFrame(codebook.items(), columns=['Character', 'Code'])
+    codebook_df = pd.DataFrame(codebook.items(), columns=['Character', 'Code']).T
     display(codebook_df)
 
     encoded_text = ''.join(codebook[char] for char in text)
