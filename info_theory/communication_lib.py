@@ -42,6 +42,28 @@ def build_codes(node, prefix="", codebook={}):
         build_codes(node.right, prefix + "1", codebook)
     return codebook
 
+def plot_huffman_tree(node):
+    dot = graphviz.Digraph()
+
+    def add_nodes_edges(node, parent=None, edge_label=""):
+        if node:
+            if node.char:
+                label = f"{node.char} ({node.freq})"
+                color = "lightpink"
+            else:
+                label = str(node.freq)
+                color = "lightblue"
+
+            dot.node(str(id(node)), label=label, style="filled", fillcolor=color)
+
+            if parent:
+                dot.edge(str(id(parent)), str(id(node)), label=edge_label)
+            add_nodes_edges(node.left, node, "0")
+            add_nodes_edges(node.right, node, "1")
+
+    add_nodes_edges(node)
+    return dot
+
 def huffman_encoding(text):
     root = build_huffman_tree(text)
     codebook = build_codes(root)
@@ -61,6 +83,8 @@ def huffman_encoding(text):
     # パディングを追加
     padding_length = (4 - len(encoded_text) % 4) % 4
     encoded_text += '0' * padding_length
+
+    display_huffman_tree(plot_huffman_tree(root))
     
     return encoded_text, codebook, padding_length
 
@@ -92,6 +116,12 @@ def huffman_decoding(encoded_text, codebook, padding_length):
     
     decoded_text = ''.join(decoded_text)
     return decoded_text
+
+def display_huffman_tree(dot):
+    dot.render('huffman_tree', format='png', cleanup=True)
+    display(Image(filename='huffman_tree.png'))
+
+
 
 color_dic = {"black":"\033[30m", "red":"\033[31m", "green":"\033[32m", "yellow":"\033[33m", "blue":"\033[34m", "end":"\033[0m"}
 
@@ -127,7 +157,7 @@ def hamming_encode(data):
     formatted_encoded_str = ''.join([print_color(bit, 'blue') if i % 8 in [0, 1, 3] else bit for i, bit in enumerate(formatted_encoded_str)])#.replace(" ", ""))])
 
     print(f"Hamming Encoded: {formatted_encoded_str}")
-    return encoded_str
+    return encoded_str, formatted_encoded_str
 
 def hamming_decode(data):
     def calculate_error_syndrome(bits):
@@ -199,11 +229,19 @@ def introduce_errors(encoded_data, error_rate):
 
     introduced_errors_data = ''.join(result)
     trans_data = format_binary_string(' '.join([introduced_errors_data[i:i+7] for i in range(0, len(introduced_errors_data), 7)]).replace(" ",""))
-    
-    
+
+    # 空白を含む形式にフォーマット
+    encoded_data_spaced = format_binary_string(encoded_data, 7)
+    introduced_errors_data_spaced = format_binary_string(introduced_errors_data, 7)
+
+    # 色付けされた文字列を作成
+    trans_data_colored = ''.join([
+        print_color(bit, 'red') if encoded_data_spaced[i] != introduced_errors_data_spaced[i] else bit
+        for i, bit in enumerate(introduced_errors_data_spaced)
+    ])
     print()
     print("雑音のある通信路")
-    print(f"Transmitted    : {trans_data}")
+    print(f"Transmitted    : {trans_data_colored}")
     return introduced_errors_data
 
 def save_to_file(filename, data):
