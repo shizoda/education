@@ -3,11 +3,11 @@ from collections import Counter
 import pandas as pd
 import graphviz
 from IPython.display import Image, display
+import json
 
 def format_binary_string(binary_string, chunk_size=7, max_length=50):
     if len(binary_string) > max_length:
         binary_string = binary_string[:max_length] + "..."
-    
     formatted_string = ' '.join([binary_string[i:i+chunk_size] for i in range(0, len(binary_string), chunk_size)])
     return formatted_string
 
@@ -18,7 +18,7 @@ class HuffmanNode:
         self.freq = freq
         self.left = None
         self.right = None
-    
+
     def __lt__(self, other):
         return self.freq < other.freq
 
@@ -26,7 +26,7 @@ def build_huffman_tree(text):
     freq = Counter(text)
     heap = [HuffmanNode(char, freq) for char, freq in freq.items()]
     heapq.heapify(heap)
-    
+
     while len(heap) > 1:
         node1 = heapq.heappop(heap)
         node2 = heapq.heappop(heap)
@@ -34,8 +34,8 @@ def build_huffman_tree(text):
         merged.left = node1
         merged.right = node2
         heapq.heappush(heap, merged)
-    
-    return heap[0]
+
+    return heap[0], freq
 
 def build_codes(node, prefix="", codebook={}):
     if node is not None:
@@ -164,7 +164,7 @@ def hamming_encode(data):
     formatted_encoded_str = ''.join([print_color(bit, 'blue') if i % 8 in [0, 1, 3] else bit for i, bit in enumerate(formatted_encoded_str)])#.replace(" ", ""))])
 
     print(f"Hamming Encoded: {formatted_encoded_str}")
-    return encoded_str, formatted_encoded_str
+    return encoded_str
 
 def hamming_decode(data):
     def calculate_error_syndrome(bits):
@@ -221,8 +221,9 @@ import random
 def introduce_errors(encoded_data, error_rate):
     result = []
     flip_prohibited_count = 0  # 反転禁止カウンター
+    error_indices = []
 
-    for bit in encoded_data:
+    for i, bit in enumerate(encoded_data):
         if flip_prohibited_count > 0:
             result.append(bit)
             flip_prohibited_count -= 1
@@ -230,12 +231,12 @@ def introduce_errors(encoded_data, error_rate):
             if random.random() < error_rate:
                 flipped_bit = '1' if bit == '0' else '0'
                 result.append(flipped_bit)
-                flip_prohibited_count = 6  # 反転後、次の3ビットは反転禁止
+                error_indices.append(i)
+                flip_prohibited_count = 6  # 反転後、次の6ビットは反転禁止
             else:
                 result.append(bit)
 
     introduced_errors_data = ''.join(result)
-    trans_data = format_binary_string(' '.join([introduced_errors_data[i:i+7] for i in range(0, len(introduced_errors_data), 7)]).replace(" ",""))
 
     # 空白を含む形式にフォーマット
     encoded_data_spaced = format_binary_string(encoded_data, 7)
@@ -246,6 +247,7 @@ def introduce_errors(encoded_data, error_rate):
         print_color(bit, 'red') if encoded_data_spaced[i] != introduced_errors_data_spaced[i] else bit
         for i, bit in enumerate(introduced_errors_data_spaced)
     ])
+
     print()
     print("雑音のある通信路")
     print(f"Transmitted    : {trans_data_colored}")
