@@ -2,7 +2,7 @@ import heapq
 from collections import Counter
 import pandas as pd
 import graphviz
-from IPython.display import Image, display
+from IPython.display import Image, display, HTML
 import json
 import os
 
