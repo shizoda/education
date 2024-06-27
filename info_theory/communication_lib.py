@@ -72,7 +72,7 @@ def huffman_encoding(text):
     root, freq_table = build_huffman_tree(text)
 
     # Create and display frequency table
-    freq_df = pd.DataFrame(freq_table.items(), columns=['Character', 'Frequency'])
+    freq_df = pd.DataFrame(freq_table.items(), columns=['Character', 'Frequency']).T
     display(freq_df)
 
     codebook = build_codes(root)
