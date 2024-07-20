@@ -6,6 +6,7 @@
 #### 機械学習と画像処理
 - [入門](https://github.com/shizoda/education/blob/main/machine_learning/basics/neural.ipynb)
 - [NumPy](https://github.com/shizoda/education/blob/main/machine_learning/numpy.ipynb)
+- [カラー画像の表現](https://github.com/shizoda/education/blob/main/image/colors.ipynb)
 - [画像処理と畳み込み](https://github.com/shizoda/education/blob/main/image/conv.ipynb)
 - [Convolutional Neural Network (CNN) による画像分類](https://github.com/shizoda/education/blob/main/machine_learning/cnn/cifar10_pytorch.ipynb)
 - [Vision Transformer (ViT) による画像分類](https://github.com/shizoda/education/blob/main/machine_learning/transformer/cifar10_pytorch_vit.ipynb)
