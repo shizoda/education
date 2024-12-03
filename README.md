@@ -11,6 +11,7 @@
 - [Convolutional Neural Network (CNN) による画像分類](https://github.com/shizoda/education/blob/main/machine_learning/cnn/cifar10_pytorch.ipynb)
 - [Vision Transformer (ViT) による画像分類](https://github.com/shizoda/education/blob/main/machine_learning/transformer/cifar10_pytorch_vit.ipynb)
 - [Variational Auto Encoder (VAE) による画像生成](https://github.com/shizoda/education/blob/main/machine_learning/vae/vae-mnist.ipynb)
+- [損失関数](https://github.com/shizoda/education/blob/main/machine_learning/loss.ipynb)
 - [オプティマイザ](https://github.com/shizoda/education/blob/main/machine_learning/optimizer.ipynb)
 - [活性化関数](https://github.com/shizoda/education/blob/main/machine_learning/activation.ipynb)
 
