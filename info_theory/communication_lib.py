@@ -5,6 +5,7 @@ import graphviz
 from IPython.display import Image, display
 import json
 import os
+import random
 
 def format_binary_string(binary_string, chunk_size=7, max_length=50):
     if len(binary_string) > max_length:
