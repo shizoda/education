@@ -176,11 +176,12 @@ def hamming_encode(data):
 
 def hamming_decode(data):
     def calculate_error_syndrome(bits):
-        # シンドローム計算を新しいパリティ位置に合わせて変更
-        p1 = bits[4] ^ bits[0] ^ bits[1] ^ bits[3]
-        p2 = bits[5] ^ bits[0] ^ bits[2] ^ bits[3]
-        p3 = bits[6] ^ bits[1] ^ bits[2] ^ bits[3]
-        return p1, p2, p3
+        # パリティビットが後ろ3ビットにある場合の正しいシンドローム計算
+        # 各パリティビットとそれが保護するデータビットのXOR
+        s1 = bits[4] ^ bits[0] ^ bits[1] ^ bits[3]
+        s2 = bits[5] ^ bits[0] ^ bits[2] ^ bits[3]
+        s3 = bits[6] ^ bits[1] ^ bits[2] ^ bits[3]
+        return s1, s2, s3
 
     decoded_data = []
     decoded_data_all = []
@@ -189,25 +190,37 @@ def hamming_decode(data):
 
     for i in range(0, len(data), 7):
         block = [int(bit) for bit in data[i:i+7]]
-        p1, p2, p3 = calculate_error_syndrome(block)
+        if len(block) < 7:  # 不完全なブロックの処理
+            continue
+            
+        s1, s2, s3 = calculate_error_syndrome(block)
         
-        # エラーのシンドローム値から位置を計算
-        error_code = p1 + (p2 << 1) + (p3 << 2)
-        # 新しいエラー位置マッピング
-        error_position_map = {
-            1: 0, 2: 1, 3: 3, 4: 2,  # データビットのエラー
-            5: 4, 6: 5, 7: 6         # パリティビットのエラー
-        }
+        # シンドロームから直接エラー位置を計算
+        error_position = None
+        if s1 and not s2 and not s3:
+            error_position = 0  # データビット0のエラー
+        elif not s1 and s2 and not s3:
+            error_position = 2  # データビット2のエラー
+        elif s1 and s2 and not s3:
+            error_position = 1  # データビット1のエラー
+        elif not s1 and not s2 and s3:
+            error_position = 6  # パリティビット3のエラー
+        elif s1 and not s2 and s3:
+            error_position = 3  # データビット3のエラー
+        elif not s1 and s2 and s3:
+            error_position = 5  # パリティビット2のエラー
+        elif s1 and s2 and s3:
+            error_position = 4  # パリティビット1のエラー
         
         original_block = ''.join(map(str, block))
-        if error_code:
-            if error_code in error_position_map:
-                error_position = error_position_map[error_code]
-                block[error_position] ^= 1  # エラー訂正
-                corrected = ''.join(map(str, block))
-                if n_corrected < 10:
-                    corrected_blocks.append((i, error_position, original_block, corrected))
-                n_corrected += 1
+        
+        if error_position is not None:
+            # エラー訂正
+            block[error_position] ^= 1
+            corrected = ''.join(map(str, block))
+            if n_corrected < 10:
+                corrected_blocks.append((i, error_position, original_block, corrected))
+            n_corrected += 1
 
         # 最初の4ビットがデータビット
         decoded_block = [block[0], block[1], block[2], block[3]]
