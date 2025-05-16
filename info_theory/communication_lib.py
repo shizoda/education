@@ -147,6 +147,8 @@ def hamming_encode(data):
     print(f"Hamming Input  : {format_binary_string(data, 4)}")
 
     def calculate_parity_bits(bits):
+        # パリティビットの計算を変更
+        # 生成行列に基づいたパリティ計算
         p1 = bits[0] ^ bits[1] ^ bits[3]
         p2 = bits[0] ^ bits[2] ^ bits[3]
         p3 = bits[1] ^ bits[2] ^ bits[3]
@@ -156,23 +158,27 @@ def hamming_encode(data):
     for i in range(0, len(data), 4):
         block = [int(bit) for bit in data[i:i+4]]
         if len(block) < 4:
-            block.extend([0] * (4 - len(block)))  # Padding with zeros if less than 4 bits
+            block.extend([0] * (4 - len(block)))  # 4ビット未満の場合は0で埋める
         parity_bits = calculate_parity_bits(block)
-        encoded_block = [parity_bits[0], parity_bits[1], block[0], parity_bits[2], block[1], block[2], block[3]]
+        
+        # 新しいブロック構造: [データビット][パリティビット]
+        encoded_block = [block[0], block[1], block[2], block[3], parity_bits[0], parity_bits[1], parity_bits[2]]
         encoded_data.extend(encoded_block)
 
     encoded_str = ''.join(map(str, encoded_data))
     formatted_encoded_str = format_binary_string(encoded_str, 7)
-    formatted_encoded_str = ''.join([print_color(bit, 'blue') if i % 8 in [0, 1, 3] else bit for i, bit in enumerate(formatted_encoded_str)])#.replace(" ", ""))])
+    # パリティビットが後ろ3ビットになったのでインデックスを変更
+    formatted_encoded_str = ''.join([print_color(bit, 'blue') if i % 8 in [4, 5, 6] else bit for i, bit in enumerate(formatted_encoded_str)])
 
     print(f"Hamming Encoded: {formatted_encoded_str}")
     return encoded_str
 
 def hamming_decode(data):
     def calculate_error_syndrome(bits):
-        p1 = bits[0] ^ bits[2] ^ bits[4] ^ bits[6]
-        p2 = bits[1] ^ bits[2] ^ bits[5] ^ bits[6]
-        p3 = bits[3] ^ bits[4] ^ bits[5] ^ bits[6]
+        # シンドローム計算を新しいパリティ位置に合わせて変更
+        p1 = bits[4] ^ bits[0] ^ bits[1] ^ bits[3]
+        p2 = bits[5] ^ bits[0] ^ bits[2] ^ bits[3]
+        p3 = bits[6] ^ bits[1] ^ bits[2] ^ bits[3]
         return p1, p2, p3
 
     decoded_data = []
@@ -183,42 +189,51 @@ def hamming_decode(data):
     for i in range(0, len(data), 7):
         block = [int(bit) for bit in data[i:i+7]]
         p1, p2, p3 = calculate_error_syndrome(block)
-        error_position = p1 + (p2 << 1) + (p3 << 2)
+        
+        # エラーのシンドローム値から位置を計算
+        error_code = p1 + (p2 << 1) + (p3 << 2)
+        # 新しいエラー位置マッピング
+        error_position_map = {
+            1: 0, 2: 1, 3: 3, 4: 2,  # データビットのエラー
+            5: 4, 6: 5, 7: 6         # パリティビットのエラー
+        }
+        
         original_block = ''.join(map(str, block))
-        if error_position:
-            block[error_position - 1] ^= 1  # Correct the error
-            corrected = ''.join(map(str, block))
-            if n_corrected < 10:
-                corrected_blocks.append((i, error_position, original_block, corrected))
-            n_corrected += 1
+        if error_code:
+            if error_code in error_position_map:
+                error_position = error_position_map[error_code]
+                block[error_position] ^= 1  # エラー訂正
+                corrected = ''.join(map(str, block))
+                if n_corrected < 10:
+                    corrected_blocks.append((i, error_position, original_block, corrected))
+                n_corrected += 1
 
-        decoded_block = [block[2], block[4], block[5], block[6]]
+        # 最初の4ビットがデータビット
+        decoded_block = [block[0], block[1], block[2], block[3]]
         decoded_data.extend(decoded_block)
         decoded_data_all.extend(block)
 
     decoded_str = ''.join(map(str, decoded_data))
     decoded_str_all = ''.join(map(str, decoded_data_all))
 
-    # Print the corrected blocks
+    # 訂正されたブロックを表示
     print(f"{n_corrected} corrections in total.")
     for i, error_position, original, corrected in corrected_blocks:
-        print(f"  (Block-{i//7}, Bit-{error_position-1}): {format_binary_string(original)} --> {format_binary_string(corrected)}")
+        print(f"  (Block-{i//7}, Bit-{error_position}): {format_binary_string(original)} --> {format_binary_string(corrected)}")
     if n_corrected > 10:
         print("      etc.")
 
     formatted_data = format_binary_string(data, 7)
-    formatted_data = ''.join([print_color(bit, 'blue') if i % 8 in [0, 1, 3] else bit for i, bit in enumerate(formatted_data)])
+    # 色付けを後ろ3ビットに変更
+    formatted_data = ''.join([print_color(bit, 'blue') if i % 8 in [4, 5, 6] else bit for i, bit in enumerate(formatted_data)])
     formatted_decoded_str_all = format_binary_string(decoded_str_all, 7)
-    formatted_decoded_str_all = ''.join([print_color(bit, 'blue') if i % 7 in [0, 1, 3] else bit for i, bit in enumerate(formatted_decoded_str_all.replace(" ", ""))])
+    formatted_decoded_str_all = ''.join([print_color(bit, 'blue') if i % 7 in [4, 5, 6] else bit for i, bit in enumerate(formatted_decoded_str_all.replace(" ", ""))])
     formatted_decoded_str = format_binary_string(decoded_str, 4)
 
     print("Received       :", formatted_data)
     print("Hamming Decoded:", formatted_decoded_str_all)
     print("Hamming Output :", formatted_decoded_str)
     return decoded_str
-
-
-import random
 
 def introduce_errors(encoded_data, error_rate):
     result = []
